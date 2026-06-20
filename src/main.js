@@ -1,5 +1,9 @@
 import './style.css';
 import { QUESTIONS } from './questions.js';
+import { inject } from '@vercel/analytics';
+
+// Initialize Vercel Analytics
+inject();
 
 /* ========================================================
    AMCAT Practice Arena — Complete Application Logic
