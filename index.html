@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AMCAT Practice Arena</title>
+  <meta name="description" content="Practice for AMCAT with English, Logic, Quant, Automata Coding, and Web Design modules — 82 questions with timer and gamification." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <main class="app-shell">
+    <!-- 5 SCREENS -->
+
+    <!-- SCREEN 1: LOGIN -->
+    <section class="login-screen" id="loginScreen">
+      <div class="login-card">
+        <p class="eyebrow">AMCAT Practice Arena</p>
+        <h1>Login to save your progress.</h1>
+        <p class="summary">Your attempts, scores, module results, and unfinished practice run are saved on this browser for your profile.</p>
+        <form class="login-form" id="loginForm">
+          <label>Name <input id="loginName" name="loginName" autocomplete="username" required minlength="2" /></label>
+          <label>Password <input id="loginPassword" name="loginPassword" type="password" autocomplete="current-password" required minlength="4" /></label>
+          <button class="primary-action" type="submit">Login / Create Profile</button>
+          <p class="form-message" id="loginMessage"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- USER BAR (fixed top-right) -->
+    <div class="user-bar hidden" id="userBar">
+      <div><span>Player</span><strong id="playerName">Guest</strong></div>
+      <button class="secondary-action compact-action" id="logoutButton">Logout</button>
+    </div>
+
+    <!-- SCREEN 2: INTRO/HOME -->
+    <section class="intro-screen hidden" id="introScreen">
+      <div class="intro-copy">
+        <p class="eyebrow">AMCAT Practice Arena</p>
+        <h1>Train for the 82-question sprint.</h1>
+        <p class="summary">English, Logical, Quantitative, Automata Coding, and Web Design modules — generated fresh every attempt with AMCAT-style question count and time limits.</p>
+        <div class="exam-strip" aria-label="Exam info">
+          <span>Exam date</span>
+          <strong>22nd June 2026 — WE ARE GONNA CRACK IT....!!!!</strong>
+        </div>
+        <div class="intro-actions">
+          <button class="primary-action" id="startExam"><span>Start Practice</span><span aria-hidden="true">&gt;</span></button>
+          <button class="secondary-action hidden" id="resumeExam">Resume Saved Run</button>
+        </div>
+        <!-- History Panel -->
+        <section class="history-panel" aria-label="Saved results">
+          <div class="history-heading"><div><p class="eyebrow">Saved Progress</p><h2>Result History</h2></div><strong id="bestScore">Best 0/82</strong></div>
+          <div class="history-list" id="historyList"></div>
+        </section>
+        <!-- Quest Board -->
+        <section class="quest-panel" aria-label="Player progress">
+          <div class="quest-heading"><div><p class="eyebrow">Quest Board</p><h2 id="rankTitle">Rookie Runner</h2></div><div class="level-medal"><span id="levelText">Lv 1</span><small id="xpText">0 XP</small></div></div>
+          <div class="xp-track" aria-label="Level progress"><div class="xp-fill" id="xpFill"></div></div>
+          <div class="quest-stats">
+            <span><strong id="totalAttempts">0</strong> attempts</span>
+            <span><strong id="totalCorrect">0</strong> correct</span>
+            <span><strong id="badgeCount">0</strong> badges</span>
+          </div>
+          <div class="badge-rack" id="badgeRack"></div>
+        </section>
+      </div>
+      <!-- Score orbit visual -->
+      <div class="score-orbit" aria-hidden="true">
+        <div class="dial"><span>82</span><small>Questions</small></div>
+        <div class="module-stack">
+          <div class="mini-card english">20 min<br />English</div>
+          <div class="mini-card logic">15 min<br />Logic</div>
+          <div class="mini-card quant">25 min<br />Quant</div>
+          <div class="mini-card automata-card">30 min<br />Automata</div>
+          <div class="mini-card webdesign-card">15 min<br />Web Dev</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN 3: MCQ GAME -->
+    <section class="game-screen hidden" id="gameScreen">
+      <header class="game-header">
+        <div><p class="eyebrow" id="moduleLabel">Module</p><h2 id="questionTitle">Question 1</h2></div>
+        <div class="timer-panel"><span id="timerText">20:00</span><small>Time left</small></div>
+      </header>
+      <div class="progress-track" aria-label="Question progress"><div class="progress-fill" id="progressFill"></div></div>
+      <section class="arena-hud" aria-label="Game status">
+        <div class="hud-pill"><span>Shields</span><strong id="shieldText">3/3</strong></div>
+        <div class="hud-pill"><span>Combo</span><strong id="comboText">x1</strong></div>
+        <div class="hud-pill"><span>Rank XP</span><strong id="liveXpText">+0</strong></div>
+        <div class="power-row">
+          <button class="secondary-action compact-action" id="hintButton">Hint</button>
+          <button class="secondary-action compact-action" id="fiftyButton">50/50</button>
+        </div>
+      </section>
+      <section class="question-panel">
+        <div class="topic-row"><span id="topicBadge">Topic</span><span id="streakBadge">Streak 0</span></div>
+        <p class="hint-box hidden" id="hintBox"></p>
+        <p class="question-text" id="questionText"></p>
+        <div class="options-grid" id="optionsGrid"></div>
+      </section>
+      <footer class="playbar">
+        <div class="stats"><span><strong id="scoreText">0</strong> score</span><span><strong id="answeredText">0</strong>/82 answered</span></div>
+        <button class="secondary-action" id="nextQuestion" disabled>Next</button>
+      </footer>
+    </section>
+
+    <!-- SCREEN 4: AUTOMATA CODE EDITOR -->
+    <section class="game-screen hidden" id="automataScreen">
+      <header class="game-header">
+        <div><p class="eyebrow">Automata — Code Writing</p><h2 id="automataTitle">Problem 1 of 2</h2></div>
+        <div class="timer-panel"><span id="automataTimerText">30:00</span><small>Time left</small></div>
+      </header>
+      <div class="progress-track"><div class="progress-fill" id="automataProgressFill"></div></div>
+      <section class="question-panel automata-panel">
+        <div class="topic-row"><span id="automataTopicBadge">Problem Solving</span><span id="automataLangBadge">C</span></div>
+        <div class="problem-statement" id="problemStatement"></div>
+        <div class="sample-io">
+          <div class="io-block"><div class="io-label">Sample Input</div><pre class="io-content" id="sampleInput"></pre></div>
+          <div class="io-block"><div class="io-label">Expected Output</div><pre class="io-content" id="sampleOutput"></pre></div>
+        </div>
+        <div class="code-editor-wrapper">
+          <div class="editor-header"><span>Your Code</span><select id="langSelect"><option value="c">C</option><option value="python">Python</option><option value="java">Java</option></select></div>
+          <textarea class="code-editor" id="codeEditor" spellcheck="false" placeholder="// Write your solution here..."></textarea>
+        </div>
+        <div class="test-cases-panel hidden" id="testCasesPanel">
+          <h3>Test Cases</h3>
+          <div id="testCasesList"></div>
+        </div>
+        <div class="solution-panel hidden" id="solutionPanel">
+          <h3>Reference Solution</h3>
+          <pre class="solution-code" id="solutionCode"></pre>
+        </div>
+      </section>
+      <footer class="playbar">
+        <div class="automata-actions">
+          <button class="secondary-action" id="showTestCases">Show Test Cases</button>
+          <button class="secondary-action" id="showSolution">Show Solution</button>
+        </div>
+        <button class="primary-action" id="nextAutomata">Submit &amp; Next →</button>
+      </footer>
+    </section>
+
+    <!-- SCREEN 5: RESULTS -->
+    <section class="result-screen hidden" id="resultScreen">
+      <div class="result-hero">
+        <p class="eyebrow">Attempt Complete</p>
+        <h2 id="resultTitle">Score</h2>
+        <p id="resultMessage"></p>
+      </div>
+      <div class="reward-panel" id="rewardPanel"></div>
+      <div class="module-results" id="moduleResults"></div>
+      <div class="result-actions">
+        <button class="primary-action" id="retryExam">Play Again</button>
+        <button class="secondary-action" id="reviewMistakes">Review Misses</button>
+        <button class="secondary-action" id="backHome">Home</button>
+      </div>
+      <div class="review-list hidden" id="reviewList"></div>
+    </section>
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
